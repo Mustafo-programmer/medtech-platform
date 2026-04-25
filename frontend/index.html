@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedTech Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div id="login-page" class="page">
+    <div class="login-box">
+      <div class="login-logo">
+        <span class="logo-icon">⚕</span>
+        <h1>MedTech Platform</h1>
+        <p>Система управления медоборудованием</p>
+      </div>
+      <div class="form-group">
+        <input type="text" id="login-input" placeholder="Логин" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <input type="password" id="password-input" placeholder="Пароль">
+      </div>
+      <button id="login-btn" class="btn btn-primary btn-full">Войти</button>
+      <p id="login-error" class="error-msg"></p>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app-page" class="page hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⚕</span>
+        <span>MedTech</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="catalog">
+          <span class="nav-icon">🖥</span> Каталог
+        </a>
+        <a href="#" class="nav-item admin-only" data-page="admin">
+          <span class="nav-icon">⚙</span> Админ панель
+        </a>
+        <a href="#" class="nav-item" data-page="issues">
+          <span class="nav-icon">⚠</span> Проблемы
+        </a>
+        <a href="#" class="nav-item admin-only" data-page="users">
+          <span class="nav-icon">👥</span> Пользователи
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <span id="user-name"></span>
+          <span id="user-role" class="role-badge"></span>
+        </div>
+        <button id="logout-btn" class="btn btn-logout">Выйти</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- ADMIN PAGE -->
+        <div id="admin-view" class="view hidden">
+        <div class="view-header">
+            <h2>Админ панель</h2>
+            <button class="btn btn-secondary" onclick="exportBackup()">⬇ Экспорт данных</button>
+        </div>
+
+        <!-- TABS -->
+        <div class="detail-tabs" style="margin-bottom:24px;">
+            <button class="tab-btn active" onclick="switchAdminTab('dashboard')">📊 Дашборд</button>
+            <button class="tab-btn" onclick="switchAdminTab('logs')">📋 Логи</button>
+            <button class="tab-btn" onclick="switchAdminTab('settings')">⚙ Настройки</button>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="admin-tab-dashboard" class="tab-content active">
+            <div id="stats-grid" class="stats-grid"></div>
+            <div id="charts-row" class="charts-row"></div>
+        </div>
+
+        <!-- LOGS -->
+        <div id="admin-tab-logs" class="tab-content">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+            <button class="btn btn-danger" onclick="clearLogs()">Очистить логи</button>
+            </div>
+            <div id="logs-list"></div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="admin-tab-settings" class="tab-content">
+            <div id="settings-form" class="settings-form"></div>
+        </div>
+        </div>
+
+      <!-- CATALOG PAGE -->
+      <div id="catalog-view" class="view">
+        <div class="view-header">
+          <h2>Каталог оборудования</h2>
+          <div class="header-actions">
+            <input type="text" id="search-input" placeholder="Поиск..." class="search-input">
+            <select id="category-filter" class="filter-select">
+              <option value="">Все категории</option>
+              <option value="ECG">ЭКГ</option>
+              <option value="EEG">ЭЭГ</option>
+              <option value="Ultrasound">УЗИ</option>
+              <option value="MRI">МРТ</option>
+              <option value="CT">КТ</option>
+              <option value="Xray">Рентген</option>
+              <option value="Lab">Лаборатория</option>
+              <option value="Other">Другое</option>
+            </select>
+            <button id="add-equipment-btn" class="btn btn-primary editor-only">+ Добавить</button>
+          </div>
+        </div>
+        <div id="equipment-grid" class="equipment-grid">
+          <!-- cards here -->
+        </div>
+      </div>
+
+      <!-- EQUIPMENT DETAIL PAGE -->
+      <div id="detail-view" class="view hidden">
+        <div class="view-header">
+          <button id="back-btn" class="btn btn-back">← Назад</button>
+          <div class="header-actions">
+            <button id="edit-equipment-btn" class="btn btn-secondary editor-only">Редактировать</button>
+            <button id="delete-equipment-btn" class="btn btn-danger admin-only">Удалить</button>
+          </div>
+        </div>
+        <div id="equipment-detail" class="detail-container">
+          <!-- detail content here -->
+        </div>
+      </div>
+
+      <!-- ISSUES PAGE -->
+      <div id="issues-view" class="view hidden">
+        <div class="view-header">
+          <h2>Все проблемы</h2>
+        </div>
+        <div id="issues-list" class="issues-list">
+          <!-- issues here -->
+        </div>
+      </div>
+
+      <!-- USERS PAGE -->
+      <div id="users-view" class="view hidden">
+        <div class="view-header">
+          <h2>Пользователи</h2>
+          <button id="add-user-btn" class="btn btn-primary">+ Добавить</button>
+        </div>
+        <div id="users-list" class="users-list">
+          <!-- users here -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button id="modal-close" class="btn-close">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <!-- dynamic content -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
